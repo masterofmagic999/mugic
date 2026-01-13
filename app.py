@@ -1,17 +1,21 @@
 """
 Main Flask application for the Music Practice Feedback System
+Enhanced with AI-powered OMR and Authentication
 """
 import os
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
 import logging
 
-from src.sheet_music_analyzer import SheetMusicAnalyzer
-from src.audio_analyzer import AudioAnalyzer
+from src.ai_omr_system import AIOMRSystem
+from src.enhanced_audio_analyzer import EnhancedAudioAnalyzer
+from src.audio_analyzer import AudioAnalyzer  # Fallback
 from src.feedback_generator import FeedbackGenerator
 from src.session_manager import SessionManager
 from src.database import init_db
+from src.auth import init_auth, AuthManager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -26,6 +30,7 @@ app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50MB max file size
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['RECORDINGS_FOLDER'] = 'recordings'
 app.config['ALLOWED_EXTENSIONS'] = {'pdf'}
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 
 # Ensure directories exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -34,11 +39,17 @@ os.makedirs(app.config['RECORDINGS_FOLDER'], exist_ok=True)
 # Initialize database
 init_db()
 
-# Initialize components
-sheet_music_analyzer = SheetMusicAnalyzer()
-audio_analyzer = AudioAnalyzer()
+# Initialize authentication
+init_auth(app)
+
+# Initialize AI-powered components
+ai_omr_system = AIOMRSystem()
+enhanced_audio_analyzer = EnhancedAudioAnalyzer()
+audio_analyzer = AudioAnalyzer()  # Fallback
 feedback_generator = FeedbackGenerator()
 session_manager = SessionManager()
+
+logger.info("Mugic application initialized with AI-powered OMR and Enhanced Audio Analysis")
 
 
 def allowed_file(filename):
@@ -55,7 +66,7 @@ def index():
 
 @app.route('/api/upload-sheet-music', methods=['POST'])
 def upload_sheet_music():
-    """Upload and analyze sheet music PDF"""
+    """Upload and analyze sheet music PDF with AI-powered OMR"""
     try:
         if 'file' not in request.files:
             return jsonify({'error': 'No file provided'}), 400
@@ -72,9 +83,9 @@ def upload_sheet_music():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         
-        # Analyze the sheet music
-        logger.info(f"Analyzing sheet music: {filename}")
-        analysis = sheet_music_analyzer.analyze(filepath)
+        # Analyze the sheet music with AI-powered OMR
+        logger.info(f"Analyzing sheet music with AI OMR: {filename}")
+        analysis = ai_omr_system.analyze_sheet_music(filepath)
         
         # Create a new piece entry
         piece_id = session_manager.create_piece(filename, analysis)
@@ -83,7 +94,7 @@ def upload_sheet_music():
             'success': True,
             'piece_id': piece_id,
             'analysis': analysis,
-            'message': 'Sheet music uploaded and analyzed successfully'
+            'message': 'Sheet music uploaded and analyzed with AI-powered OMR'
         })
     
     except Exception as e:
@@ -93,7 +104,7 @@ def upload_sheet_music():
 
 @app.route('/api/analyze-performance', methods=['POST'])
 def analyze_performance():
-    """Analyze recorded performance against sheet music"""
+    """Analyze recorded performance against sheet music with enhanced AI"""
     try:
         data = request.get_json()
         piece_id = data.get('piece_id')
@@ -109,14 +120,26 @@ def analyze_performance():
         if not piece:
             return jsonify({'error': 'Piece not found'}), 404
         
-        # Analyze the audio performance
-        logger.info(f"Analyzing performance for piece {piece_id}")
+        # Analyze the audio performance with enhanced AI
+        logger.info(f"Analyzing performance with enhanced AI for piece {piece_id}")
         audio_path = os.path.join(app.config['RECORDINGS_FOLDER'], audio_file)
-        audio_analysis = audio_analyzer.analyze(
-            audio_path,
-            instrument=instrument,
-            apply_noise_reduction=True
-        )
+        
+        try:
+            # Try enhanced analyzer first
+            audio_analysis = enhanced_audio_analyzer.analyze(
+                audio_path,
+                instrument=instrument,
+                apply_noise_reduction=True
+            )
+            logger.info("Used enhanced AI audio analyzer")
+        except Exception as e:
+            logger.warning(f"Enhanced analyzer failed, using fallback: {e}")
+            # Fallback to standard analyzer
+            audio_analysis = audio_analyzer.analyze(
+                audio_path,
+                instrument=instrument,
+                apply_noise_reduction=True
+            )
         
         # Generate feedback
         feedback = feedback_generator.generate_feedback(
@@ -212,6 +235,161 @@ def get_instruments():
         'success': True,
         'instruments': instruments
     })
+
+
+# ============================================================================
+# Authentication Endpoints
+# ============================================================================
+
+@app.route('/api/auth/register', methods=['POST'])
+def register():
+    """Register a new user"""
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+        full_name = data.get('full_name')
+        
+        if not username or not email or not password:
+            return jsonify({
+                'success': False,
+                'error': 'Username, email, and password are required'
+            }), 400
+        
+        success, message, user_data = AuthManager.register_user(
+            username=username,
+            email=email,
+            password=password,
+            full_name=full_name
+        )
+        
+        if success:
+            return jsonify({
+                'success': True,
+                'message': message,
+                'user': user_data
+            }), 201
+        else:
+            return jsonify({
+                'success': False,
+                'error': message
+            }), 400
+            
+    except Exception as e:
+        logger.error(f"Registration error: {str(e)}")
+        return jsonify({'success': False, 'error': 'Registration failed'}), 500
+
+
+@app.route('/api/auth/login', methods=['POST'])
+def login():
+    """Login user and return tokens"""
+    try:
+        data = request.get_json()
+        username_or_email = data.get('username')
+        password = data.get('password')
+        
+        if not username_or_email or not password:
+            return jsonify({
+                'success': False,
+                'error': 'Username/email and password are required'
+            }), 400
+        
+        success, message, user_data, tokens = AuthManager.authenticate_user(
+            username_or_email=username_or_email,
+            password=password
+        )
+        
+        if success:
+            return jsonify({
+                'success': True,
+                'message': message,
+                'user': user_data,
+                'tokens': tokens
+            }), 200
+        else:
+            return jsonify({
+                'success': False,
+                'error': message
+            }), 401
+            
+    except Exception as e:
+        logger.error(f"Login error: {str(e)}")
+        return jsonify({'success': False, 'error': 'Login failed'}), 500
+
+
+@app.route('/api/auth/profile', methods=['GET'])
+@jwt_required()
+def get_profile():
+    """Get current user profile"""
+    try:
+        user_id = get_jwt_identity()
+        user = AuthManager.get_user_by_id(user_id)
+        
+        if not user:
+            return jsonify({'success': False, 'error': 'User not found'}), 404
+        
+        return jsonify({
+            'success': True,
+            'user': user.to_dict()
+        })
+        
+    except Exception as e:
+        logger.error(f"Profile error: {str(e)}")
+        return jsonify({'success': False, 'error': 'Failed to get profile'}), 500
+
+
+@app.route('/api/auth/profile', methods=['PUT'])
+@jwt_required()
+def update_profile():
+    """Update user profile"""
+    try:
+        user_id = get_jwt_identity()
+        data = request.get_json()
+        
+        success, message = AuthManager.update_user(user_id, **data)
+        
+        if success:
+            return jsonify({'success': True, 'message': message})
+        else:
+            return jsonify({'success': False, 'error': message}), 400
+            
+    except Exception as e:
+        logger.error(f"Profile update error: {str(e)}")
+        return jsonify({'success': False, 'error': 'Update failed'}), 500
+
+
+@app.route('/api/auth/change-password', methods=['POST'])
+@jwt_required()
+def change_password():
+    """Change user password"""
+    try:
+        user_id = get_jwt_identity()
+        data = request.get_json()
+        
+        old_password = data.get('old_password')
+        new_password = data.get('new_password')
+        
+        if not old_password or not new_password:
+            return jsonify({
+                'success': False,
+                'error': 'Old and new password are required'
+            }), 400
+        
+        success, message = AuthManager.change_password(
+            user_id=user_id,
+            old_password=old_password,
+            new_password=new_password
+        )
+        
+        if success:
+            return jsonify({'success': True, 'message': message})
+        else:
+            return jsonify({'success': False, 'error': message}), 400
+            
+    except Exception as e:
+        logger.error(f"Password change error: {str(e)}")
+        return jsonify({'success': False, 'error': 'Password change failed'}), 500
 
 
 if __name__ == '__main__':

@@ -1,9 +1,11 @@
-// Mugic - Main Application JavaScript
+// Mugic - Main Application JavaScript with Authentication
 
 let currentPieceId = null;
 let mediaRecorder = null;
 let audioChunks = [];
 let currentInstrument = null;
+let authToken = null;
+let currentUser = null;
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,6 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeApp() {
+    // Check for stored auth token
+    authToken = localStorage.getItem('mugic_auth_token');
+    if (authToken) {
+        loadUserProfile();
+    }
+    
     // Load instruments
     loadInstruments();
     
@@ -33,7 +41,165 @@ function setupEventListeners() {
     // Actions
     document.getElementById('practice-again-btn').addEventListener('click', practiceAgain);
     document.getElementById('new-piece-btn').addEventListener('click', uploadNewPiece);
+    
+    // Authentication
+    document.getElementById('login-btn').addEventListener('click', showLoginModal);
+    document.getElementById('logout-btn').addEventListener('click', logout);
+    document.querySelector('.close-modal').addEventListener('click', closeAuthModal);
+    document.getElementById('show-register').addEventListener('click', (e) => {
+        e.preventDefault();
+        showRegisterForm();
+    });
+    document.getElementById('show-login').addEventListener('click', (e) => {
+        e.preventDefault();
+        showLoginForm();
+    });
+    
+    // Auth forms
+    document.getElementById('login-form-element').addEventListener('submit', handleLogin);
+    document.getElementById('register-form-element').addEventListener('submit', handleRegister);
+    
+    // Close modal on outside click
+    window.addEventListener('click', (e) => {
+        const modal = document.getElementById('auth-modal');
+        if (e.target === modal) {
+            closeAuthModal();
+        }
+    });
 }
+
+// ============================================================================
+// Authentication Functions
+// ============================================================================
+
+function showLoginModal() {
+    document.getElementById('auth-modal').style.display = 'block';
+    showLoginForm();
+}
+
+function closeAuthModal() {
+    document.getElementById('auth-modal').style.display = 'none';
+}
+
+function showLoginForm() {
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('register-form').style.display = 'none';
+}
+
+function showRegisterForm() {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'block';
+}
+
+async function handleLogin(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-password').value;
+    
+    try {
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username, password})
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            authToken = data.tokens.access_token;
+            currentUser = data.user;
+            localStorage.setItem('mugic_auth_token', authToken);
+            
+            updateUIForLoggedInUser();
+            closeAuthModal();
+            alert('Welcome back, ' + currentUser.username + '!');
+            loadPiecesLibrary();
+        } else {
+            alert('Login failed: ' + data.error);
+        }
+    } catch (error) {
+        alert('Login error: ' + error.message);
+    }
+}
+
+async function handleRegister(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('register-username').value;
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+    const fullName = document.getElementById('register-fullname').value;
+    
+    try {
+        const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                username,
+                email,
+                password,
+                full_name: fullName || undefined
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('Account created successfully! Please sign in.');
+            showLoginForm();
+            document.getElementById('login-username').value = username;
+        } else {
+            alert('Registration failed: ' + data.error);
+        }
+    } catch (error) {
+        alert('Registration error: ' + error.message);
+    }
+}
+
+async function loadUserProfile() {
+    try {
+        const response = await fetch('/api/auth/profile', {
+            headers: {
+                'Authorization': 'Bearer ' + authToken
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            currentUser = data.user;
+            updateUIForLoggedInUser();
+        } else {
+            // Token expired or invalid
+            logout();
+        }
+    } catch (error) {
+        console.error('Error loading profile:', error);
+        logout();
+    }
+}
+
+function updateUIForLoggedInUser() {
+    document.getElementById('login-btn').style.display = 'none';
+    document.getElementById('user-menu').style.display = 'flex';
+    document.getElementById('username-display').textContent = currentUser.username;
+}
+
+function logout() {
+    authToken = null;
+    currentUser = null;
+    localStorage.removeItem('mugic_auth_token');
+    
+    document.getElementById('login-btn').style.display = 'block';
+    document.getElementById('user-menu').style.display = 'none';
+    
+    alert('Logged out successfully');
+}
+
+// ============================================================================
+// Original Functions (with auth headers added where needed)
+// ============================================================================
 
 async function loadInstruments() {
     try {
