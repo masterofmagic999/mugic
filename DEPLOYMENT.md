@@ -37,9 +37,10 @@ The following platforms offer **truly free hosting without requiring a credit ca
        sys.path = [project_home] + sys.path
    
    # Set environment variables
-   # SECURITY WARNING: Replace these with your actual generated secret keys!
-   os.environ['SECRET_KEY'] = 'your-generated-secret-key-here'
-   os.environ['JWT_SECRET_KEY'] = 'your-generated-jwt-secret-key-here'
+   # SECURITY WARNING: Replace placeholders with your actual generated secret keys!
+   # Generate with: python -c "import secrets; print(secrets.token_hex(32))"
+   os.environ['SECRET_KEY'] = '<your-generated-secret-key-here>'
+   os.environ['JWT_SECRET_KEY'] = '<your-generated-jwt-secret-key-here>'
    os.environ['FLASK_ENV'] = 'production'
    
    # Import flask app

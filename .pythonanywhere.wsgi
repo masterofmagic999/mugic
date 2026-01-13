@@ -23,8 +23,11 @@ if project_home not in sys.path:
 # Set environment variables
 # SECURITY: Replace these placeholder values with your actual secret keys!
 # Generate secure keys with: python -c "import secrets; print(secrets.token_hex(32))"
-os.environ['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'CHANGE-THIS-your-secret-key-here')
-os.environ['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'CHANGE-THIS-your-jwt-secret-key-here')
+if 'SECRET_KEY' not in os.environ or os.environ.get('SECRET_KEY', '').startswith('CHANGE-THIS'):
+    raise ValueError('SECRET_KEY environment variable must be set to a secure value!')
+if 'JWT_SECRET_KEY' not in os.environ or os.environ.get('JWT_SECRET_KEY', '').startswith('CHANGE-THIS'):
+    raise ValueError('JWT_SECRET_KEY environment variable must be set to a secure value!')
+
 os.environ['FLASK_ENV'] = 'production'
 
 # Import flask app
