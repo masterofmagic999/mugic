@@ -54,3 +54,7 @@ temp/
 # Logs
 *.log
 logs/
+
+# Deployment
+.vercel
+.railway

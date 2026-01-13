@@ -1,6 +1,7 @@
 # Core dependencies
 Flask==3.0.0
 Flask-CORS==4.0.0
+gunicorn==21.2.0
 
 # PDF and Sheet Music Processing
 pdf2image==1.16.3

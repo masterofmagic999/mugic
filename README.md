@@ -2,7 +2,20 @@
 
 **AI-Powered Music Practice Feedback System with Advanced OMR and Authentication**
 
-Mugic is a powerful application equipped with state-of-the-art AI that helps musicians practice more effectively. Upload PDF sheet music (analyzed with neural network-based OMR), record yourself playing, and receive instant, actionable feedback powered by advanced machine learning models.
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/mugic)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+Mugic is a powerful application equipped with state-of-the-art AI that helps musicians practice more effectively. Upload PDF sheet music (analyzed with Audiveris OMR), record yourself playing (analyzed with Spotify's basic-pitch), and receive instant, actionable feedback powered by open-source LLMs.
+
+## 🚀 Quick Deploy
+
+**One-Click Deployment:**
+- **Railway**: Click the button above (recommended - easiest)
+- **Render**: Click the deploy button (free tier available)
+- **Fly.io**: `fly launch` (see [DEPLOYMENT.md](DEPLOYMENT.md))
+- **Docker**: `docker-compose up` (see below)
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions for all platforms.
 
 ## ✨ Key Features
 
