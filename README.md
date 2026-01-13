@@ -9,7 +9,13 @@ Mugic is a powerful application equipped with state-of-the-art AI that helps mus
 
 ## 🚀 Quick Deploy
 
-**One-Click Deployment:**
+**Free Options (No Credit Card Required):**
+- **PythonAnywhere**: Perfect for Python apps, completely free forever
+- **Replit**: Instant deployment with built-in IDE
+- **Glitch**: Fast and simple, auto-restarts on changes
+- **Koyeb**: Generous free tier with global edge network
+
+**One-Click Deployment (May Require Credit Card):**
 - **Railway**: Click the button above (recommended - easiest)
 - **Render**: Click the deploy button (free tier available)
 - **Fly.io**: `fly launch` (see [DEPLOYMENT.md](DEPLOYMENT.md))
