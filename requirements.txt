@@ -45,5 +45,5 @@ Werkzeug==3.0.1
 requests==2.31.0
 
 # Note: Audiveris requires Java Runtime Environment (JRE) 11 or higher
-# Audiveris will be downloaded and integrated via subprocess calls
-# See setup instructions in README for Audiveris installation
+# The Dockerfile installs OpenJDK 17 which is compatible
+# See DEPLOYMENT.md for Audiveris installation instructions
