@@ -1,6 +1,6 @@
 """
 Main Flask application for the Music Practice Feedback System
-Enhanced with AI-powered OMR and Authentication
+Real implementations: Audiveris OMR + Spotify basic-pitch
 """
 import os
 from flask import Flask, request, jsonify, render_template, send_from_directory
@@ -9,10 +9,11 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
 import logging
 
-from src.ai_omr_system import AIOMRSystem
-from src.enhanced_audio_analyzer import EnhancedAudioAnalyzer
-from src.audio_analyzer import AudioAnalyzer  # Fallback
-from src.feedback_generator import FeedbackGenerator
+# Real implementations
+from src.audiveris_omr import AudiverisOMR
+from src.real_audio_analyzer import RealAudioAnalyzer
+from src.real_omr_system import RealOMRSystem  # Fallback if Audiveris not available
+from src.real_feedback_generator import RealFeedbackGenerator
 from src.session_manager import SessionManager
 from src.database import init_db
 from src.auth import init_auth, AuthManager
@@ -42,14 +43,41 @@ init_db()
 # Initialize authentication
 init_auth(app)
 
-# Initialize AI-powered components
-ai_omr_system = AIOMRSystem()
-enhanced_audio_analyzer = EnhancedAudioAnalyzer()
-audio_analyzer = AudioAnalyzer()  # Fallback
-feedback_generator = FeedbackGenerator()
+# Initialize REAL components with actual functionality
+try:
+    # Try Audiveris first (best quality OMR)
+    audiveris_omr = AudiverisOMR()
+    if audiveris_omr.is_available():
+        omr_system = audiveris_omr
+        logger.info("✓ Using Audiveris OMR (GitHub open-source)")
+    else:
+        # Fallback to computer vision-based OMR
+        omr_system = RealOMRSystem()
+        logger.info("⚠ Audiveris not found, using computer vision OMR fallback")
+        logger.info("  Install Audiveris from: https://github.com/Audiveris/audiveris")
+except Exception as e:
+    logger.error(f"OMR initialization error: {e}")
+    omr_system = RealOMRSystem()
+
+# Initialize real audio analyzer with Spotify basic-pitch
+try:
+    audio_analyzer = RealAudioAnalyzer()
+    logger.info("✓ Using Spotify basic-pitch for audio transcription")
+except Exception as e:
+    logger.error(f"Audio analyzer initialization error: {e}")
+    raise RuntimeError("basic-pitch is required. Install with: pip install basic-pitch")
+
+# Real feedback generator with LLM
+feedback_generator = RealFeedbackGenerator()
 session_manager = SessionManager()
 
-logger.info("Mugic application initialized with AI-powered OMR and Enhanced Audio Analysis")
+logger.info("=" * 60)
+logger.info("Mugic Application Initialized - ALL REAL IMPLEMENTATIONS")
+logger.info("OMR: Audiveris (if available) or Computer Vision")
+logger.info("Audio: Spotify basic-pitch")
+logger.info("Feedback: Open-source LLM (TinyLlama/DistilGPT2)")
+logger.info("Auth: JWT with bcrypt")
+logger.info("=" * 60)
 
 
 def allowed_file(filename):
@@ -83,9 +111,9 @@ def upload_sheet_music():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         
-        # Analyze the sheet music with AI-powered OMR
-        logger.info(f"Analyzing sheet music with AI OMR: {filename}")
-        analysis = ai_omr_system.analyze_sheet_music(filepath)
+        # Analyze the sheet music with REAL OMR (Audiveris or CV-based)
+        logger.info(f"Analyzing sheet music with real OMR: {filename}")
+        analysis = omr_system.analyze_sheet_music(filepath)
         
         # Create a new piece entry
         piece_id = session_manager.create_piece(filename, analysis)
@@ -94,7 +122,7 @@ def upload_sheet_music():
             'success': True,
             'piece_id': piece_id,
             'analysis': analysis,
-            'message': 'Sheet music uploaded and analyzed with AI-powered OMR'
+            'message': f'Sheet music analyzed with {analysis.get("analysis_method", "OMR")}'
         })
     
     except Exception as e:
@@ -120,26 +148,17 @@ def analyze_performance():
         if not piece:
             return jsonify({'error': 'Piece not found'}), 404
         
-        # Analyze the audio performance with enhanced AI
-        logger.info(f"Analyzing performance with enhanced AI for piece {piece_id}")
+        # Analyze the audio performance with REAL Spotify basic-pitch
+        logger.info(f"Analyzing performance with Spotify basic-pitch for piece {piece_id}")
         audio_path = os.path.join(app.config['RECORDINGS_FOLDER'], audio_file)
         
-        try:
-            # Try enhanced analyzer first
-            audio_analysis = enhanced_audio_analyzer.analyze(
-                audio_path,
-                instrument=instrument,
-                apply_noise_reduction=True
-            )
-            logger.info("Used enhanced AI audio analyzer")
-        except Exception as e:
-            logger.warning(f"Enhanced analyzer failed, using fallback: {e}")
-            # Fallback to standard analyzer
-            audio_analysis = audio_analyzer.analyze(
-                audio_path,
-                instrument=instrument,
-                apply_noise_reduction=True
-            )
+        # Use real audio analyzer (Spotify basic-pitch)
+        audio_analysis = audio_analyzer.analyze(
+            audio_path,
+            instrument=instrument,
+            apply_noise_reduction=True
+        )
+        logger.info(f"Real audio transcription complete: {audio_analysis.get('total_notes', 0)} notes")
         
         # Generate feedback
         feedback = feedback_generator.generate_feedback(
