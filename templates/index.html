@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mugic - AI-Powered Music Practice Feedback</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Authentication Modal -->
+    <div id="auth-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form">
+                <h2>🎵 Sign In to Mugic</h2>
+                <p class="auth-subtitle">Access your practice sessions and progress</p>
+                <form id="login-form-element">
+                    <div class="form-group">
+                        <label for="login-username">Username or Email</label>
+                        <input type="text" id="login-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">Sign In</button>
+                    <p class="auth-switch">Don't have an account? <a href="#" id="show-register">Sign up</a></p>
+                </form>
+            </div>
+            
+            <!-- Register Form -->
+            <div id="register-form" class="auth-form" style="display: none;">
+                <h2>🎵 Create Your Account</h2>
+                <p class="auth-subtitle">Join Mugic and start improving your music skills</p>
+                <form id="register-form-element">
+                    <div class="form-group">
+                        <label for="register-username">Username</label>
+                        <input type="text" id="register-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-fullname">Full Name (Optional)</label>
+                        <input type="text" id="register-fullname">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" required>
+                        <small>At least 8 characters with uppercase, lowercase, and number</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">Create Account</button>
+                    <p class="auth-switch">Already have an account? <a href="#" id="show-login">Sign in</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div>
+                    <h1>🎵 Mugic</h1>
+                    <p class="subtitle">AI-Powered Music Practice Feedback with Advanced OMR</p>
+                </div>
+                <div class="user-section">
+                    <button id="login-btn" class="btn btn-secondary">Sign In</button>
+                    <div id="user-menu" style="display: none;">
+                        <span id="username-display"></span>
+                        <button id="logout-btn" class="btn btn-secondary">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Upload Section -->
+            <section id="upload-section" class="section">
+                <h2>Upload Sheet Music</h2>
+                <p class="section-info">📄 Upload PDF sheet music - AI-powered OMR will analyze notes, rhythms, and dynamics</p>
+                <div class="upload-area">
+                    <input type="file" id="sheet-music-file" accept=".pdf" style="display: none;">
+                    <button class="btn btn-primary" onclick="document.getElementById('sheet-music-file').click()">
+                        Choose PDF File
+                    </button>
+                    <p id="file-name" class="file-name"></p>
+                    <button id="upload-btn" class="btn btn-success" style="display: none;">Upload & Analyze with AI</button>
+                </div>
+                <div id="upload-status" class="status-message"></div>
+            </section>
+
+            <!-- Practice Section -->
+            <section id="practice-section" class="section" style="display: none;">
+                <h2>Practice Session</h2>
+                
+                <div class="piece-info">
+                    <h3 id="current-piece-name">Current Piece</h3>
+                    <p id="piece-details"></p>
+                </div>
+
+                <div class="settings">
+                    <div class="setting-group">
+                        <label for="instrument-select">Select Your Instrument:</label>
+                        <select id="instrument-select" class="form-control">
+                            <option value="">Loading instruments...</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group">
+                        <label>
+                            <input type="checkbox" id="disable-dynamics">
+                            Disable dynamics feedback (focus on notes and rhythm)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="recording-controls">
+                    <button id="start-recording-btn" class="btn btn-primary">
+                        🎤 Start Recording
+                    </button>
+                    <button id="stop-recording-btn" class="btn btn-danger" style="display: none;">
+                        ⏹️ Stop Recording
+                    </button>
+                    <p id="recording-status"></p>
+                </div>
+
+                <div id="analysis-loading" class="loading" style="display: none;">
+                    <p>🎼 Analyzing your performance...</p>
+                </div>
+            </section>
+
+            <!-- Feedback Section -->
+            <section id="feedback-section" class="section" style="display: none;">
+                <h2>Performance Feedback</h2>
+                
+                <div class="overall-score">
+                    <h3>Overall Score</h3>
+                    <div class="score-circle">
+                        <span id="overall-score">0</span>
+                        <span class="score-max">/100</span>
+                    </div>
+                    <p id="performance-summary"></p>
+                </div>
+
+                <div class="detailed-feedback">
+                    <div class="feedback-card">
+                        <h4>🎯 Pitch Accuracy</h4>
+                        <div class="score-bar">
+                            <div class="score-fill" id="pitch-score-bar"></div>
+                        </div>
+                        <p id="pitch-score"></p>
+                        <div id="pitch-details"></div>
+                    </div>
+
+                    <div class="feedback-card">
+                        <h4>🥁 Rhythm</h4>
+                        <div class="score-bar">
+                            <div class="score-fill" id="rhythm-score-bar"></div>
+                        </div>
+                        <p id="rhythm-score"></p>
+                        <div id="rhythm-details"></div>
+                    </div>
+
+                    <div class="feedback-card">
+                        <h4>⏱️ Tempo</h4>
+                        <div class="score-bar">
+                            <div class="score-fill" id="tempo-score-bar"></div>
+                        </div>
+                        <p id="tempo-score"></p>
+                        <div id="tempo-details"></div>
+                    </div>
+
+                    <div class="feedback-card" id="dynamics-card">
+                        <h4>🔊 Dynamics</h4>
+                        <div class="score-bar">
+                            <div class="score-fill" id="dynamics-score-bar"></div>
+                        </div>
+                        <p id="dynamics-score"></p>
+                        <div id="dynamics-details"></div>
+                    </div>
+                </div>
+
+                <div class="recommendations">
+                    <h3>💡 Recommendations</h3>
+                    <ul id="recommendations-list"></ul>
+                </div>
+
+                <div class="comparison" id="comparison-section" style="display: none;">
+                    <h3>📊 Comparison with Previous Attempts</h3>
+                    <div id="comparison-content"></div>
+                </div>
+
+                <div class="actions">
+                    <button id="practice-again-btn" class="btn btn-primary">
+                        Practice Again
+                    </button>
+                    <button id="new-piece-btn" class="btn btn-secondary">
+                        Upload New Piece
+                    </button>
+                </div>
+            </section>
+
+            <!-- Pieces Library -->
+            <section id="library-section" class="section">
+                <h2>Your Music Library</h2>
+                <div id="pieces-list" class="pieces-grid">
+                    <p class="empty-message">No pieces uploaded yet. Upload your first sheet music above!</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Mugic - AI-Powered Music Practice Feedback System</p>
+            <p class="small">✨ Advanced AI-powered OMR • 🔊 Sophisticated noise filtration • 🎺 All concert band instruments supported</p>
+            <p class="small">🧠 Powered by neural networks and deep learning for accurate analysis</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
