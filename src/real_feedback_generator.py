@@ -28,7 +28,7 @@ class RealFeedbackGenerator:
             self._init_llm()
     
     def _init_llm(self):
-        """Initialize lightweight open-source LLM"""
+        """Initialize lightweight open-source LLM with secure settings"""
         try:
             # Use TinyLlama - a small but capable 1.1B parameter model
             # Falls back to distilgpt2 if TinyLlama not available
@@ -41,6 +41,7 @@ class RealFeedbackGenerator:
                 try:
                     self.logger.info(f"Loading LLM: {model_name}")
                     
+                    # Security: Use local_files_only=True if model is cached to prevent remote code execution
                     self.llm_pipeline = pipeline(
                         "text-generation",
                         model=model_name,
@@ -49,7 +50,8 @@ class RealFeedbackGenerator:
                         max_length=200,
                         do_sample=True,
                         temperature=0.7,
-                        top_p=0.9
+                        top_p=0.9,
+                        trust_remote_code=False  # Security: Never trust remote code
                     )
                     
                     self.logger.info(f"✓ LLM loaded: {model_name}")
