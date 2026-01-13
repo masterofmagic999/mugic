@@ -1,10 +1,11 @@
-run = "gunicorn app:app --bind 0.0.0.0:3000 --workers 2 --timeout 120"
+run = "gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
 
 [env]
 FLASK_ENV = "production"
+PORT = "5000"
 
 [nix]
 channel = "stable-23_11"
 
 [deployment]
-run = ["sh", "-c", "gunicorn app:app --bind 0.0.0.0:3000 --workers 2 --timeout 120"]
+run = ["sh", "-c", "gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120"]

@@ -29,20 +29,20 @@ Save these keys - you'll need them for deployment!
 1. Go to https://www.pythonanywhere.com
 2. Sign up for a free account (no credit card needed)
 3. Click "Open Bash console" from dashboard
-4. Run:
+4. Run (replace `<yourusername>` with your GitHub username):
    ```bash
-   git clone https://github.com/yourusername/mugic.git
+   git clone https://github.com/<yourusername>/mugic.git
    cd mugic
    mkvirtualenv --python=/usr/bin/python3.10 mugic
    pip install -r requirements.txt
    ```
 5. Go to "Web" tab → "Add a new web app"
 6. Choose "Manual configuration" → Python 3.10
-7. Set virtualenv: `/home/yourusername/.virtualenvs/mugic`
+7. Set virtualenv: `/home/<yourusername>/.virtualenvs/mugic` (replace with your username)
 8. Edit WSGI file (update paths and add your secret keys from step 1)
 9. Reload web app
 
-**URL:** Your app will be at `yourusername.pythonanywhere.com`
+**URL:** Your app will be at `<yourusername>.pythonanywhere.com`
 
 ---
 
@@ -60,7 +60,7 @@ Save these keys - you'll need them for deployment!
    - `JWT_SECRET_KEY` = your generated key
 6. Click "Run"
 
-**URL:** Your app will be at `your-repl-name.yourusername.repl.co`
+**URL:** Your app will be at `<your-repl-name>.<yourusername>.repl.co`
 
 ---
 

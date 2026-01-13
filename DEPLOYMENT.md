@@ -15,7 +15,7 @@ The following platforms offer **truly free hosting without requiring a credit ca
 2. Open a Bash console from the dashboard
 3. Clone your repository:
    ```bash
-   git clone https://github.com/yourusername/mugic.git
+   git clone https://github.com/<yourusername>/mugic.git
    cd mugic
    ```
 4. Create a virtual environment and install dependencies:
@@ -31,19 +31,21 @@ The following platforms offer **truly free hosting without requiring a credit ca
    import os
    
    # Add your project directory to the sys.path
-   project_home = '/home/yourusername/mugic'
+   # Replace '<yourusername>' with your actual username
+   project_home = '/home/<yourusername>/mugic'
    if project_home not in sys.path:
        sys.path = [project_home] + sys.path
    
    # Set environment variables
-   os.environ['SECRET_KEY'] = 'your-secret-key-here'
-   os.environ['JWT_SECRET_KEY'] = 'your-jwt-secret-key-here'
+   # SECURITY WARNING: Replace these with your actual generated secret keys!
+   os.environ['SECRET_KEY'] = 'your-generated-secret-key-here'
+   os.environ['JWT_SECRET_KEY'] = 'your-generated-jwt-secret-key-here'
    os.environ['FLASK_ENV'] = 'production'
    
    # Import flask app
    from app import app as application
    ```
-8. Set the virtualenv path to `/home/yourusername/.virtualenvs/mugic`
+8. Set the virtualenv path to `/home/<yourusername>/.virtualenvs/mugic`
 9. Reload the web app
 
 **Pros:** 
@@ -64,23 +66,16 @@ The following platforms offer **truly free hosting without requiring a credit ca
 ### 2. Replit (Great for Quick Testing - No Credit Card Required)
 
 **Steps:**
-1. Sign up at [Replit](https://replit.com) (free account, no credit card)
-2. Click "Create Repl"
-3. Choose "Import from GitHub" and paste your repository URL
-4. Replit will auto-detect Python and install dependencies
-5. Create a `.replit` file in the root:
-   ```toml
-   run = "gunicorn app:app --bind 0.0.0.0:3000 --workers 2 --timeout 120"
-   
-   [env]
-   FLASK_ENV = "production"
-   SECRET_KEY = "your-secret-key-here"
-   JWT_SECRET_KEY = "your-jwt-secret-key-here"
-   ```
-6. Add secrets in the "Secrets" tab (lock icon):
-   - `SECRET_KEY`
-   - `JWT_SECRET_KEY`
-7. Click "Run" button
+1. Go to https://replit.com
+2. Sign up for free (no credit card)
+3. Click "Create Repl"
+4. Choose "Import from GitHub" and paste your repository URL
+5. Replit will auto-detect Python and install dependencies
+6. The `.replit` configuration file is already included in the repository
+7. Add secrets in the "Secrets" tab (lock icon) - **Important!**
+   - `SECRET_KEY` = (generate with: `python -c "import secrets; print(secrets.token_hex(32))"`)
+   - `JWT_SECRET_KEY` = (generate with the same command)
+8. Click "Run" button
 
 **Pros:**
 - No credit card required
