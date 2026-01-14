@@ -184,18 +184,40 @@ The following platforms offer **truly free hosting without requiring a credit ca
 
 ### 6. Render
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/masterofmagic999/mugic)
+
+**One-Click Deploy:** Click the button above for instant deployment!
 
 **Steps:**
+1. Click the "Deploy to Render" button above
+2. Sign up or log in to [Render](https://render.com)
+3. Authorize GitHub access
+4. Review the auto-configured settings (from `render.json`)
+5. Click "Apply" - environment variables are auto-generated
+6. Wait 5-15 minutes for build to complete
+7. Your app is live!
+
+**Manual Deployment:**
 1. Visit [Render](https://render.com) and sign up
-2. Click "New +" → "Web Service"
+2. Click "New +" → "Blueprint" (or "Web Service")
 3. Connect your GitHub repository
 4. Render will detect `render.yaml` automatically
 5. Configure environment variables (SECRET_KEY, JWT_SECRET_KEY)
 6. Click "Create Web Service"
 
-**Pros:** Free tier, automatic SSL, easy database add-ons
-**Cost:** Free for starter
+**Pros:** 
+- One-click deployment with `render.json` blueprint
+- Free tier with 750 hours/month
+- Automatic SSL certificates
+- Docker support with full Audiveris OMR
+- Easy database add-ons
+
+**Important:** 
+- Uses Docker deployment with Java/Audiveris support
+- See [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md) for detailed instructions
+- Troubleshooting guide included for common issues
+
+**Cost:** Free for starter (512MB RAM, sleeps after 15 min inactivity)
 
 ---
 

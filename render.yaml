@@ -1,21 +1,41 @@
 # Render deployment configuration
 # https://render.com
+#
+# This configuration supports two deployment methods:
+# 1. Docker-based deployment (recommended, uses Dockerfile.render)
+# 2. Native Python deployment (comment out dockerfilePath and uncomment buildCommand)
 
 services:
   - type: web
     name: mugic
-    env: python
-    region: oregon
-    plan: starter
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 4 --timeout 120
+    env: docker  # Use 'docker' for Docker deployment, 'python' for native
+    region: oregon  # Choose: oregon, frankfurt, singapore, ohio, virginia
+    plan: starter  # Free tier
+    
+    # Docker deployment (recommended)
+    dockerfilePath: ./Dockerfile.render
+    dockerContext: .
+    
+    # Native Python deployment (alternative - uncomment if not using Docker)
+    # env: python
+    # buildCommand: pip install -r requirements.txt
+    # startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 4 --timeout 120
+    
+    # Environment variables
     envVars:
       - key: FLASK_ENV
         value: production
+      - key: FLASK_APP
+        value: app.py
       - key: SECRET_KEY
         generateValue: true
       - key: JWT_SECRET_KEY
         generateValue: true
       - key: PYTHON_VERSION
         value: 3.11.0
+    
+    # Auto-deploy on git push
     autoDeploy: true
+    
+    # Health check endpoint
+    healthCheckPath: /api/instruments
