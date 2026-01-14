@@ -227,19 +227,21 @@ Render automatically monitors your app using the health check endpoint:
 **Solutions**:
 - ✅ **Use One-Click Deploy** - Pre-configured to work correctly
 - ✅ **Use `Dockerfile.render`** - This optimized Dockerfile handles Java installation with fallbacks
-- ✅ **Updated Dockerfile** - Now tries OpenJDK 17 first, then falls back to OpenJDK 11
+- ✅ **Use `Dockerfile.render`** - This optimized Dockerfile handles Java installation with fallbacks
+- ✅ **Updated Dockerfile** - Now tries OpenJDK 21 first (latest), then falls back to 17 or 11
 - The Dockerfiles now set `DEBIAN_FRONTEND=noninteractive` to avoid interactive prompts
-- Added `software-properties-common` for better package management
+- Removed unnecessary packages that caused build failures
 
 **How to Verify**:
 - Check build logs for "java -version" output
-- Successful Java installation will show: `openjdk version "17.x.x"` or `openjdk version "11.x.x"`
+- Successful Java installation will show: `openjdk version "21.x.x"` (or `"17.x.x"` or `"11.x.x"` as fallbacks)
 
 **If Still Failing**:
 ```dockerfile
-# The Dockerfile.render now includes:
+# The Dockerfile.render now includes smart fallback:
 RUN apt-get update && \
-    (apt-get install -y --no-install-recommends openjdk-17-jre-headless || \
+    (apt-get install -y --no-install-recommends openjdk-21-jre-headless || \
+     apt-get install -y --no-install-recommends openjdk-17-jre-headless || \
      apt-get install -y --no-install-recommends openjdk-11-jre-headless) && \
     rm -rf /var/lib/apt/lists/* && \
     java -version
@@ -318,7 +320,7 @@ RUN apt-get update && \
 ```bash
 # In the build logs, look for:
 java -version
-# Should output: openjdk version "17.x.x" or "11.x.x"
+# Should output: openjdk version "21.x.x" (or "17.x.x" or "11.x.x" as fallbacks)
 ```
 
 ### Viewing Logs

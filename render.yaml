@@ -3,7 +3,7 @@
 #
 # This configuration supports two deployment methods:
 # 1. Docker-based deployment (recommended, uses Dockerfile.render)
-# 2. Native Python deployment (comment out dockerfilePath and uncomment buildCommand)
+# 2. Native Python deployment (see instructions below)
 
 services:
   - type: web
@@ -12,12 +12,12 @@ services:
     region: oregon  # Choose: oregon, frankfurt, singapore, ohio, virginia
     plan: starter  # Free tier
     
-    # Docker deployment (recommended)
+    # Docker deployment (recommended) - Comment out lines 16-17 for native Python
     dockerfilePath: ./Dockerfile.render
     dockerContext: .
     
-    # Native Python deployment (alternative - uncomment if not using Docker)
-    # env: python
+    # Native Python deployment (uncomment lines 20-22, comment out lines 16-17, and change env to 'python')
+    # Note: Native deployment does NOT include Java/Audiveris support
     # buildCommand: pip install -r requirements.txt
     # startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 4 --timeout 120
     
