@@ -13,6 +13,12 @@ opencv-python==4.8.1.78
 numpy==1.24.3
 scikit-image==0.22.0
 
+# OEMER - End-to-end OMR (lightweight, serverless-friendly)
+oemer==0.1.8
+
+# OCR for text detection in music scores (optional but recommended)
+pytesseract==0.3.10
+
 # Audio Processing and Analysis
 librosa==0.10.1
 soundfile==0.12.1
@@ -46,4 +52,6 @@ requests==2.31.0
 
 # Note: Audiveris requires Java Runtime Environment (JRE) 11 or higher
 # The Dockerfile installs OpenJDK 17 which is compatible
+# OEMER is added as a serverless-friendly alternative for Vercel
+# pytesseract requires tesseract-ocr system package (see DEPLOYMENT.md)
 # See DEPLOYMENT.md for Audiveris installation instructions

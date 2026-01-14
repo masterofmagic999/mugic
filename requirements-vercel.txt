@@ -14,7 +14,7 @@ email-validator==2.1.0
 # Database - Essential
 SQLAlchemy==2.0.23
 
-# Audio Processing - Core only (removed heavy dependencies)
+# Audio Processing - Core only
 librosa==0.10.1
 soundfile==0.12.1
 scipy==1.11.4
@@ -29,6 +29,10 @@ opencv-python-headless==4.8.1.78
 numpy==1.24.3
 scikit-image==0.22.0
 
+# OEMER - End-to-end OMR (PERFECT for Vercel!)
+# Lightweight, serverless-friendly, no Java required
+oemer==0.1.8
+
 # Music Analysis - Core
 music21==9.1.0
 pretty_midi==0.2.10
@@ -38,10 +42,11 @@ transformers==4.48.0
 sentencepiece==0.1.99
 
 # Note: Heavy dependencies removed or made optional:
-# - torch (use torch-cpu if needed)
-# - accelerate (optional)
-# - noisereduce (optional, high memory)
-# - mido (optional)
+# - torch (removed - use CPU version if needed)
+# - accelerate (removed - optional for LLM)
+# - noisereduce (removed - high memory usage)
+# - mido (removed - optional)
+# + oemer (added - excellent for serverless!)
 
 # Utilities
 python-dotenv==1.0.0
