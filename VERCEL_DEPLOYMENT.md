@@ -127,49 +127,46 @@ The project includes an optimized `vercel.json` configuration:
 ```json
 {
   "version": 2,
-  "builds": [
+  "name": "mugic",
+  "rewrites": [
     {
-      "src": "api/index.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb",
-        "runtime": "python3.9"
-      }
+      "source": "/static/(.*)",
+      "destination": "/static/$1"
     },
     {
-      "src": "static/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.py"
+      "source": "/(.*)",
+      "destination": "/api/index.py"
     }
   ],
   "env": {
     "FLASK_ENV": "production"
+  },
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.9"
+    }
   },
   "functions": {
     "api/index.py": {
       "maxDuration": 60,
       "memory": 3008
     }
+  },
+  "regions": ["iad1"],
+  "github": {
+    "silent": false
   }
 }
 ```
 
 **Key Configuration Points:**
 
-- **`api/index.py`**: Serverless function entry point
-- **`maxLambdaSize`**: Increased to 50MB for ML dependencies
+- **`api/index.py`**: Serverless function entry point (automatically detected by Vercel)
+- **`rewrites`**: Modern routing configuration (replaces legacy `routes`)
 - **`maxDuration`**: 60 seconds (requires Pro plan; 10s on free tier)
 - **`memory`**: 3008MB for AI/ML operations (requires Pro plan; 1024MB on free tier)
-- **Static files**: Served via `@vercel/static` for optimal performance
+- **Static files**: Automatically served by Vercel from the `static/` directory
+- **Zero-config deployment**: Vercel automatically detects Python functions in `api/` directory
 
 ---
 
