@@ -280,8 +280,15 @@ vercel env add FLASK_ENV production
 - ✅ **End-to-end** - deep learning model trained on large datasets
 - ✅ **Works with photos** - handles skewed and phone-taken images
 - ✅ **MusicXML output** - standard music notation format
+- ✅ **REAL AI** - uses actual neural networks (UNet with 226 layers, SegNet with 184 layers)
 
 **OEMER is automatically enabled when deploying to Vercel!**
+
+**This is REAL AI, not a simulation:**
+- Pre-trained deep learning models (47MB + 51MB ONNX files)
+- Trained on CvcMuscima and DeepScores datasets
+- ONNX Runtime inference engine by Microsoft
+- Convolutional neural networks with hundreds of layers
 
 ### OMR System Priority
 
@@ -293,6 +300,7 @@ The application uses a **smart fallback system** to choose the best available OM
 
 2. **OEMER** (Excellent - 90-95% accuracy) **← Default for Vercel**
    - ✅ Perfect for Vercel serverless
+   - ✅ **REAL deep learning AI** (not rule-based)
    - ✅ Deep learning-based
    - ✅ Handles real-world images
    - ✅ Fast and efficient

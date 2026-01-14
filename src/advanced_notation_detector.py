@@ -313,19 +313,27 @@ class AdvancedNotationDetector:
     
     def _detect_alternate_endings(self, gray: np.ndarray, img: np.ndarray) -> List[Dict[str, Any]]:
         """
-        Detect alternate endings (1st time, 2nd time brackets)
-        These are horizontal brackets with numbers above them
+        Detect alternate endings (prima volta, seconda volta, etc.)
+        These are horizontal brackets with numbers above them that indicate
+        alternate paths through the music - you play EITHER ending 1 OR ending 2,
+        not both. Also called "voltas" or "first/second endings".
+        
+        Common usage:
+        - Play through, take ending 1, repeat back
+        - On repeat, skip ending 1, take ending 2 instead
+        - Multiple endings possible (1,2,3 or 1-3,4 etc.)
         """
         endings = []
         
         try:
             h, w = gray.shape
             
-            # Alternate endings are typically in the top half
-            top_half = gray[:int(h * 0.5), :]
+            # Alternate endings are typically in the top portion of staves
+            # They appear as horizontal brackets (voltas) with numbers
+            top_section = gray[:int(h * 0.6), :]
             
-            # Look for horizontal lines (the bracket part)
-            edges = cv2.Canny(top_half, 50, 150, apertureSize=3)
+            # Look for horizontal lines (the bracket part of volta)
+            edges = cv2.Canny(top_section, 50, 150, apertureSize=3)
             lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=100,
                                    minLineLength=100, maxLineGap=5)
             
@@ -336,24 +344,27 @@ class AdvancedNotationDetector:
                     # Check if line is mostly horizontal
                     angle = np.abs(np.arctan2(y2 - y1, x2 - x1) * 180 / np.pi)
                     if angle < 10 or angle > 170:  # Nearly horizontal
-                        # Look for numbers near this line (using OCR or template)
-                        region = top_half[max(0, y1-30):min(top_half.shape[0], y1+10),
+                        # Look for numbers or text near this line
+                        # Voltas have numbers like "1.", "2.", "1,2", "1-3", etc.
+                        region = top_section[max(0, y1-30):min(top_section.shape[0], y1+10),
                                         x1:x2]
                         
-                        # Try to detect numbers
+                        # Try to detect numbers and volta notation
                         try:
                             import pytesseract
-                            config = r'--oem 3 --psm 7 -c tessedit_char_whitelist=0123456789.'
+                            # Allow numbers, periods, commas, dashes for volta notation
+                            config = r'--oem 3 --psm 7 -c tessedit_char_whitelist=0123456789.,-'
                             text = pytesseract.image_to_string(region, config=config).strip()
                             
                             if text and any(c.isdigit() for c in text):
                                 endings.append({
                                     'type': 'alternate_ending',
-                                    'number': text,
+                                    'volta_text': text,  # e.g., "1.", "2.", "1,2", "1-3"
                                     'x': x1,
                                     'y': y1,
                                     'width': x2 - x1,
                                     'bracket_type': 'volta',
+                                    'description': f'Take this ending when playing ending {text}',
                                     'confidence': 0.85,
                                     'detection_method': 'bracket_and_OCR'
                                 })
@@ -361,11 +372,12 @@ class AdvancedNotationDetector:
                             # Fallback: just note that a bracket was found
                             endings.append({
                                 'type': 'alternate_ending',
-                                'number': 'unknown',
+                                'volta_text': 'unknown',
                                 'x': x1,
                                 'y': y1,
                                 'width': x2 - x1,
                                 'bracket_type': 'volta',
+                                'description': 'Alternate ending bracket detected',
                                 'confidence': 0.6,
                                 'detection_method': 'bracket_only'
                             })
