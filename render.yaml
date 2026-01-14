@@ -37,5 +37,5 @@ services:
     # Auto-deploy on git push
     autoDeploy: true
     
-    # Health check endpoint
-    healthCheckPath: /api/instruments
+    # Health check endpoint (using the dedicated /health endpoint)
+    healthCheckPath: /health

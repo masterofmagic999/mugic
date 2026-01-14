@@ -9,7 +9,7 @@
       "plan": "starter",
       "dockerfilePath": "./Dockerfile.render",
       "dockerContext": ".",
-      "healthCheckPath": "/api/instruments",
+      "healthCheckPath": "/health",
       "envVars": [
         {
           "key": "FLASK_ENV",

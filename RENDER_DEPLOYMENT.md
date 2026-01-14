@@ -192,10 +192,10 @@ The `Dockerfile.render` is optimized for Render deployment with full Audiveris s
 
 - **Base Image**: `python:3.11-slim` - Lightweight Python 3.11
 - **System Dependencies**: gcc, g++, make, libsndfile1, ffmpeg
-- **Java Runtime**: OpenJDK 17 or 11 (required for Audiveris OMR)
+- **Java Runtime**: OpenJDK 21, 17, or 11 (required for Audiveris OMR)
 - **Port Binding**: Uses `$PORT` environment variable provided by Render
 - **Production Ready**: Includes gunicorn with 4 workers, 120s timeout
-- **Health Check**: Monitors `/api/instruments` endpoint
+- **Health Check**: Monitors `/health` endpoint
 
 ### Environment Variables
 
@@ -211,10 +211,10 @@ The `Dockerfile.render` is optimized for Render deployment with full Audiveris s
 ### Health Check
 
 Render automatically monitors your app using the health check endpoint:
-- **Endpoint**: `/api/instruments`
+- **Endpoint**: `/health`
 - **Method**: GET
-- **Expected**: 200 OK response
-- **Configured**: In `render.yaml`
+- **Expected**: 200 OK response with `{"status": "healthy"}`
+- **Configured**: In `render.yaml` and `render.json`
 
 ## 🐛 Troubleshooting
 
@@ -296,13 +296,13 @@ RUN apt-get update && \
 
 #### 6. "Health Check Failed"
 
-**Problem**: Render can't reach `/api/instruments` endpoint.
+**Problem**: Render can't reach `/health` endpoint.
 
 **Solutions**:
 - Verify app is actually running (check logs)
-- Test endpoint locally first
+- Test endpoint locally first: `curl http://localhost:5000/health`
 - Check if app is binding to correct port (`$PORT`)
-- Ensure no authentication required for health check endpoint
+- The `/health` endpoint requires no authentication
 
 #### 7. Docker Build Fails: "Cannot Install openjdk-17"
 
