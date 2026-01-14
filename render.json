@@ -1,0 +1,38 @@
+{
+  "$schema": "https://render.com/schema/blueprint",
+  "services": [
+    {
+      "type": "web",
+      "name": "mugic",
+      "env": "docker",
+      "region": "oregon",
+      "plan": "starter",
+      "dockerfilePath": "./Dockerfile.render",
+      "dockerContext": ".",
+      "healthCheckPath": "/health",
+      "envVars": [
+        {
+          "key": "FLASK_ENV",
+          "value": "production"
+        },
+        {
+          "key": "FLASK_APP",
+          "value": "app.py"
+        },
+        {
+          "key": "SECRET_KEY",
+          "generateValue": true
+        },
+        {
+          "key": "JWT_SECRET_KEY",
+          "generateValue": true
+        },
+        {
+          "key": "PYTHON_VERSION",
+          "value": "3.11.0"
+        }
+      ],
+      "autoDeploy": true
+    }
+  ]
+}
