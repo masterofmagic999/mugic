@@ -135,7 +135,7 @@ The project includes an optimized `vercel.json` configuration:
     },
     {
       "source": "/(.*)",
-      "destination": "/api/index"
+      "destination": "/api/index.py"
     }
   ],
   "env": {
