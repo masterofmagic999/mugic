@@ -4,6 +4,7 @@
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/mugic)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/masterofmagic999/mugic)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmasterofmagic999%2Fmugic)
 
 Mugic is a powerful application equipped with state-of-the-art AI that helps musicians practice more effectively. Upload PDF sheet music (analyzed with Audiveris OMR), record yourself playing (analyzed with Spotify's basic-pitch), and receive instant, actionable feedback powered by open-source LLMs.
 
@@ -18,6 +19,7 @@ Mugic is a powerful application equipped with state-of-the-art AI that helps mus
 - **Koyeb**: Generous free tier with global edge network
 
 **One-Click Deployment (May Require Credit Card):**
+- **Vercel**: Click the deploy button above - serverless deployment with global CDN! See [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md)
 - **Render**: Click the deploy button above - includes full Audiveris OMR support! See [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md)
 - **Railway**: Click the button above (recommended - easiest)
 - **Fly.io**: `fly launch` (see [DEPLOYMENT.md](DEPLOYMENT.md))

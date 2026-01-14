@@ -1,0 +1,48 @@
+{
+  "name": "mugic",
+  "description": "AI-Powered Music Practice Feedback System with Advanced OMR and Authentication",
+  "repository": "https://github.com/masterofmagic999/mugic",
+  "logo": "https://raw.githubusercontent.com/masterofmagic999/mugic/main/static/css/logo.png",
+  "keywords": [
+    "music",
+    "ai",
+    "education",
+    "flask",
+    "python",
+    "omr",
+    "audio-analysis"
+  ],
+  "env": {
+    "SECRET_KEY": {
+      "description": "Flask secret key for session management. Generate with: python -c \"import secrets; print(secrets.token_hex(32))\"",
+      "required": true,
+      "generator": {
+        "type": "secret"
+      }
+    },
+    "JWT_SECRET_KEY": {
+      "description": "JWT token signing key. Generate with: python -c \"import secrets; print(secrets.token_hex(32))\"",
+      "required": true,
+      "generator": {
+        "type": "secret"
+      }
+    },
+    "FLASK_ENV": {
+      "description": "Flask environment (production recommended)",
+      "value": "production",
+      "required": false
+    }
+  },
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.9"
+    }
+  },
+  "regions": ["iad1"],
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 60,
+      "memory": 3008
+    }
+  }
+}

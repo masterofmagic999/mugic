@@ -1,0 +1,84 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# Uploads (not needed in serverless)
+uploads/
+recordings/
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (optional, but saves space)
+*.md
+!README.md
+!VERCEL_DEPLOYMENT.md
+
+# Other deployment configs
+Procfile
+railway.json
+render.json
+render.yaml
+fly.toml
+.replit
+glitch.json
+.pythonanywhere.wsgi
+Dockerfile.render
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Node modules if any
+node_modules/

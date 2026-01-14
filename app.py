@@ -11,8 +11,9 @@ import logging
 
 # Real implementations
 from src.audiveris_omr import AudiverisOMR
+from src.oemer_omr import OemerOMR
 from src.real_audio_analyzer import RealAudioAnalyzer
-from src.real_omr_system import RealOMRSystem  # Fallback if Audiveris not available
+from src.real_omr_system import RealOMRSystem  # Final fallback if others not available
 from src.real_feedback_generator import RealFeedbackGenerator
 from src.session_manager import SessionManager
 from src.database import init_db
@@ -44,20 +45,46 @@ init_db()
 init_auth(app)
 
 # Initialize REAL components with actual functionality
+# Priority: Audiveris > OEMER > Computer Vision OMR
+omr_system = None
+omr_method = "Unknown"
+
 try:
-    # Try Audiveris first (best quality OMR)
+    # Try Audiveris first (best quality OMR, but requires Java)
     audiveris_omr = AudiverisOMR()
     if audiveris_omr.is_available():
         omr_system = audiveris_omr
+        omr_method = "Audiveris OMR"
         logger.info("✓ Using Audiveris OMR (GitHub open-source)")
-    else:
-        # Fallback to computer vision-based OMR
-        omr_system = RealOMRSystem()
-        logger.info("⚠ Audiveris not found, using computer vision OMR fallback")
-        logger.info("  Install Audiveris from: https://github.com/Audiveris/audiveris")
+        logger.info("  Best quality - requires Java runtime")
 except Exception as e:
-    logger.error(f"OMR initialization error: {e}")
-    omr_system = RealOMRSystem()
+    logger.warning(f"Audiveris initialization error: {e}")
+
+# Try OEMER as second choice (great for serverless like Vercel)
+if omr_system is None:
+    try:
+        oemer_omr = OemerOMR()
+        if oemer_omr.is_available():
+            omr_system = oemer_omr
+            omr_method = "OEMER (End-to-end OMR)"
+            logger.info("✓ Using OEMER OMR by BreezeWhite")
+            logger.info("  Excellent quality - serverless-friendly")
+        else:
+            logger.info("⚠ OEMER not found, trying fallback")
+            logger.info("  Install OEMER with: pip install oemer")
+    except Exception as e:
+        logger.warning(f"OEMER initialization error: {e}")
+
+# Final fallback to computer vision-based OMR
+if omr_system is None:
+    try:
+        omr_system = RealOMRSystem()
+        omr_method = "Computer Vision OMR"
+        logger.info("⚠ Using computer vision OMR fallback")
+        logger.info("  Good quality - always available")
+    except Exception as e:
+        logger.error(f"All OMR systems failed: {e}")
+        raise RuntimeError("No OMR system available")
 
 # Initialize real audio analyzer with Spotify basic-pitch
 try:
@@ -73,7 +100,7 @@ session_manager = SessionManager()
 
 logger.info("=" * 60)
 logger.info("Mugic Application Initialized - ALL REAL IMPLEMENTATIONS")
-logger.info("OMR: Audiveris (if available) or Computer Vision")
+logger.info(f"OMR: {omr_method}")
 logger.info("Audio: Spotify basic-pitch")
 logger.info("Feedback: Open-source LLM (TinyLlama/DistilGPT2)")
 logger.info("Auth: JWT with bcrypt")
