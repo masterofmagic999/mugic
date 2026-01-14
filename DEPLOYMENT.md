@@ -164,7 +164,44 @@ The following platforms offer **truly free hosting without requiring a credit ca
 
 ## 🚀 Quick Deploy Options (May Require Credit Card)
 
-### 5. Railway (Recommended - Easiest)
+### 5. Vercel (Serverless - Global CDN)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmasterofmagic999%2Fmugic)
+
+**One-Click Deploy:** Click the button above for instant deployment!
+
+**Steps:**
+1. Click the "Deploy with Vercel" button above
+2. Sign up or log in to [Vercel](https://vercel.com)
+3. Authorize GitHub access
+4. Configure environment variables (SECRET_KEY, JWT_SECRET_KEY)
+5. Click "Deploy"
+6. Your app is live!
+
+**Pros:** 
+- One-click deployment with global CDN
+- Free tier with 100 GB-hours/month
+- Automatic HTTPS and SSL certificates
+- Preview deployments for every branch
+- Serverless architecture (scales automatically)
+
+**Cons:**
+- No persistent file storage (use Vercel Blob or S3)
+- 10-second timeout on free tier (60s on Pro)
+- Requires external database for production use
+- Cold starts on first request
+
+**Important:** 
+- See [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) for detailed instructions
+- Includes optimizations for serverless deployment
+- Configuration for file storage and database
+- Troubleshooting guide for common issues
+
+**Cost:** Free tier available, Pro plan $20/month for extended limits
+
+---
+
+### 6. Railway (Recommended - Easiest)
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template)
 
@@ -182,7 +219,7 @@ The following platforms offer **truly free hosting without requiring a credit ca
 
 ---
 
-### 6. Render
+### 7. Render
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/masterofmagic999/mugic)
 
@@ -221,7 +258,7 @@ The following platforms offer **truly free hosting without requiring a credit ca
 
 ---
 
-### 7. Fly.io
+### 8. Fly.io
 
 ```bash
 # Install flyctl
@@ -246,7 +283,7 @@ fly secrets set JWT_SECRET_KEY=your-jwt-secret-key
 
 ---
 
-### 8. Docker Deployment (Any Platform)
+### 9. Docker Deployment (Any Platform)
 
 ```bash
 # Build the image
@@ -270,7 +307,7 @@ docker-compose up
 
 ---
 
-### 9. Heroku
+### 10. Heroku
 
 ```bash
 # Install Heroku CLI
@@ -306,12 +343,15 @@ heroku open
 | **Replit** | ❌ No | ✅ Yes | ⚠️ Sleeps after inactivity | ⭐ Easy |
 | **Glitch** | ❌ No | ✅ Yes (200MB) | ⚠️ Sleeps after 5 min | ⭐ Easy |
 | **Koyeb** | ⚠️ Eventually | ✅ Yes | ✅ Yes | ⭐⭐ Easy-Medium |
+| **Vercel** | ⚠️ For Pro features | ✅ Yes (100 GB-hrs) | ⚠️ Serverless/Cold starts | ⭐ Easy |
 | Railway | ✅ Yes | ✅ Yes (limited) | ✅ Yes | ⭐ Easy |
 | Render | ⚠️ For some features | ✅ Yes (750 hrs) | ⚠️ Sleeps on free | ⭐ Easy |
 | Fly.io | ✅ Yes | ✅ Yes | ✅ Yes | ⭐⭐⭐ Medium |
 | Heroku | ✅ Yes | ❌ No | ✅ Yes | ⭐⭐ Easy-Medium |
 
 **Recommendation for beginners:** Start with **PythonAnywhere**, **Replit**, or **Glitch** if you want to avoid credit cards entirely.
+
+**Recommendation for serverless:** Use **Vercel** for global CDN and automatic scaling (requires external storage and database).
 
 ---
 
