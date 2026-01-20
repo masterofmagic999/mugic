@@ -642,13 +642,12 @@ def show_upload_section():
         """, unsafe_allow_html=True)
     
     with col3:
-        st.markdown("""
+        st.markdown(f"""
             <div class='metric-card'>
                 <div style='font-size: 2.5rem; text-align: center; margin-bottom: 0.5rem;'>⚡</div>
                 <div style='font-weight: 700; text-align: center; color: #667eea;'>High Speed</div>
                 <div style='text-align: center; color: #6c757d; font-size: 0.9rem;'>
-                    Fast processing with{" "}
-                    {omr_method}
+                    Fast processing with {omr_method}
                 </div>
             </div>
         """, unsafe_allow_html=True)
