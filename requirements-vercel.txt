@@ -18,7 +18,7 @@ SQLAlchemy==2.0.23
 librosa==0.10.1
 soundfile==0.12.1
 scipy==1.11.4
-basic-pitch==0.2.5
+basic-pitch==0.3.3
 
 # PDF Processing - Lighter version
 PyMuPDF==1.23.8
@@ -26,7 +26,7 @@ Pillow==10.3.0
 
 # Computer Vision - Essential only
 opencv-python-headless==4.8.1.78
-numpy==1.24.3
+numpy==1.26.4
 scikit-image==0.22.0
 
 # OEMER - End-to-end OMR (PERFECT for Vercel!)
