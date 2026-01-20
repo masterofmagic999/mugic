@@ -31,7 +31,7 @@ class RealAudioAnalyzer:
         self.sample_rate = 22050
         
         if not BASIC_PITCH_AVAILABLE:
-            raise ImportError("basic-pitch is required. Install with: pip install basic-pitch==0.2.5")
+            raise ImportError("basic-pitch is required. Install with: pip install basic-pitch==0.3.3")
         
         self.logger.info("Real Audio Analyzer initialized with Spotify's basic-pitch")
     

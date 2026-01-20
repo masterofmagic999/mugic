@@ -8,7 +8,7 @@ PyMuPDF==1.23.8
 
 # AI/ML for OMR (Optical Music Recognition)
 opencv-python==4.8.1.78
-numpy==1.24.3
+numpy==1.26.4
 scikit-image==0.22.0
 
 # OEMER - End-to-end OMR (lightweight, serverless-friendly)
@@ -22,7 +22,7 @@ librosa==0.10.1
 soundfile==0.12.1
 scipy==1.11.4
 noisereduce==3.0.0
-basic-pitch==0.2.5
+basic-pitch==0.3.3
 
 # Music Analysis
 music21==9.1.0
