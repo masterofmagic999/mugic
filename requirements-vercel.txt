@@ -22,7 +22,7 @@ basic-pitch==0.3.3
 
 # PDF Processing - Lighter version
 PyMuPDF==1.23.8
-Pillow==10.3.0
+Pillow==10.4.0
 
 # Computer Vision - Essential only
 opencv-python-headless==4.8.1.78
