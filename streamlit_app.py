@@ -18,7 +18,7 @@ from src.real_omr_system import RealOMRSystem
 from src.real_feedback_generator import RealFeedbackGenerator
 from src.session_manager import SessionManager
 from src.database import init_db
-from src.auth import AuthManager
+from src.auth_streamlit import AuthManager  # Streamlit-compatible auth
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
