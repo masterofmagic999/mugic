@@ -145,7 +145,7 @@ If you prefer more control or need to customize settings:
    - **Region**: Choose your preferred region
    - **Branch**: `main`
    - **Runtime**: Python 3
-   - **Build Command**: `pip install -r requirements.txt`
+   - **Build Command**: `pip install -r requirements-flask.txt`
    - **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT --workers 4 --timeout 120`
    - **Note**: This method does NOT include Java/Audiveris OMR support
 

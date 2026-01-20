@@ -18,7 +18,7 @@ services:
     
     # Native Python deployment (uncomment lines 20-22, comment out lines 16-17, and change env to 'python')
     # Note: Native deployment does NOT include Java/Audiveris support
-    # buildCommand: pip install -r requirements.txt
+    # buildCommand: pip install -r requirements-flask.txt
     # startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 4 --timeout 120
     
     # Environment variables

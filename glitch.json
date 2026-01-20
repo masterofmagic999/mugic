@@ -1,5 +1,5 @@
 {
-  "install": "pip install -r requirements.txt",
+  "install": "pip install -r requirements-flask.txt",
   "start": "gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120",
   "watch": {
     "ignore": [
@@ -10,7 +10,7 @@
     ],
     "install": {
       "include": [
-        "^requirements\\.txt$"
+        "^requirements-flask\\.txt$"
       ]
     },
     "restart": {

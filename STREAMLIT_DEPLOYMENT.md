@@ -33,7 +33,7 @@ git push origin main
 ### 4. Configuration
 
 Streamlit Cloud will automatically:
-- Install Python dependencies from `requirements-streamlit.txt`
+- Install Python dependencies from `requirements.txt`
 - Install system packages from `packages.txt`
 - Use settings from `.streamlit/config.toml`
 
@@ -121,7 +121,7 @@ poppler-utils       # PDF rendering
 
 ### 3. Python Dependencies
 
-The `requirements-streamlit.txt` includes all necessary packages:
+The `requirements.txt` includes all necessary packages:
 - `streamlit` - UI framework
 - `oemer` - OMR system
 - `basic-pitch` - Audio transcription
@@ -211,8 +211,8 @@ RUN wget https://github.com/Audiveris/audiveris/releases/download/5.3.1/Audiveri
     rm Audiveris-5.3.1.tar.gz
 
 # Install Python dependencies
-COPY requirements-streamlit.txt .
-RUN pip install -r requirements-streamlit.txt
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 # Copy application
 COPY . /app
