@@ -49,7 +49,7 @@ See [STREAMLIT_DEPLOYMENT.md](STREAMLIT_DEPLOYMENT.md) for comprehensive deploym
 
 ```bash
 # Install dependencies
-pip install -r requirements-streamlit.txt
+pip install -r requirements.txt
 
 # Run the app
 streamlit run streamlit_app.py

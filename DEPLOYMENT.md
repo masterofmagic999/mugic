@@ -21,7 +21,7 @@ The following platforms offer **truly free hosting without requiring a credit ca
 4. Create a virtual environment and install dependencies:
    ```bash
    mkvirtualenv --python=/usr/bin/python3.10 mugic
-   pip install -r requirements.txt
+   pip install -r requirements-flask.txt
    ```
 5. Go to "Web" tab → "Add a new web app"
 6. Choose "Manual configuration" → Python 3.10
@@ -102,7 +102,7 @@ The following platforms offer **truly free hosting without requiring a credit ca
 4. Create a `glitch.json` file in the root:
    ```json
    {
-     "install": "pip install -r requirements.txt",
+     "install": "pip install -r requirements-flask.txt",
      "start": "gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120",
      "watch": {
        "ignore": [

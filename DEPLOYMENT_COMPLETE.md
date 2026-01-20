@@ -51,7 +51,7 @@ The Mugic application has been successfully adapted for Streamlit Community Clou
   - Browser settings
 
 ### Dependencies
-- **`requirements-streamlit.txt`**
+- **`requirements.txt`**
   - Streamlit and all Python packages
   - Maintains all OMR and audio capabilities
   - bcrypt, PyJWT for auth
@@ -99,7 +99,7 @@ The app will:
 
 ```bash
 # Install dependencies
-pip install -r requirements-streamlit.txt
+pip install -r requirements.txt
 
 # Run the app
 streamlit run streamlit_app.py
@@ -128,8 +128,8 @@ RUN wget https://github.com/Audiveris/audiveris/releases/download/5.3.1/Audiveri
     tar -xzf Audiveris-5.3.1.tar.gz -C /opt/
 
 # Install dependencies
-COPY requirements-streamlit.txt .
-RUN pip install -r requirements-streamlit.txt
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 # Copy app
 COPY . /app
@@ -227,7 +227,7 @@ Before deployment, verify:
 
 - [ ] Syntax check: `python -m py_compile streamlit_app.py` ✅ Done
 - [ ] Auth module: `python -m py_compile src/auth_streamlit.py` ✅ Done
-- [ ] Dependencies: All packages in requirements-streamlit.txt
+- [ ] Dependencies: All packages in requirements.txt
 - [ ] System packages: All packages in packages.txt
 - [ ] OMR fallback: Works without Audiveris
 - [ ] OEMER: Works on cloud environment

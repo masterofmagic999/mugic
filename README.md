@@ -135,6 +135,10 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions for all 
 
 3. **Install dependencies**
    ```bash
+   # For Flask version (traditional web app)
+   pip install -r requirements-flask.txt
+   
+   # For Streamlit version (modern UI)
    pip install -r requirements.txt
    ```
 

@@ -34,7 +34,7 @@ Save these keys - you'll need them for deployment!
    git clone https://github.com/<yourusername>/mugic.git
    cd mugic
    mkvirtualenv --python=/usr/bin/python3.10 mugic
-   pip install -r requirements.txt
+   pip install -r requirements-flask.txt
    ```
 5. Go to "Web" tab → "Add a new web app"
 6. Choose "Manual configuration" → Python 3.10
