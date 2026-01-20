@@ -1,0 +1,5 @@
+tesseract-ocr
+tesseract-ocr-eng
+libsndfile1
+ffmpeg
+poppler-utils
