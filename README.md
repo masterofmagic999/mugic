@@ -12,9 +12,11 @@ Mugic is a powerful application equipped with state-of-the-art AI that helps mus
 ## 🚀 Quick Deploy
 
 > **💡 New to deployment?** Check out [QUICK_DEPLOY.md](QUICK_DEPLOY.md) for a step-by-step guide!
+> 
+> **⚡ Streamlit Cloud Fixed!** TensorFlow dependency issue resolved (January 2026). See [STREAMLIT_TROUBLESHOOTING.md](STREAMLIT_TROUBLESHOOTING.md) for details.
 
 **Free Options (No Credit Card Required):**
-- **🎈 Streamlit Cloud**: **NEW!** Beautiful UI with excellent OMR - See [STREAMLIT_DEPLOYMENT.md](STREAMLIT_DEPLOYMENT.md) and [README_STREAMLIT.md](README_STREAMLIT.md)
+- **🎈 Streamlit Cloud**: **READY TO DEPLOY!** Beautiful UI with excellent OMR - See [STREAMLIT_DEPLOYMENT.md](STREAMLIT_DEPLOYMENT.md) and [README_STREAMLIT.md](README_STREAMLIT.md)
 - **PythonAnywhere**: Perfect for Python apps, completely free forever
 - **Replit**: Instant deployment with built-in IDE
 - **Glitch**: Fast and simple, auto-restarts on changes
