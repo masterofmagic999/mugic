@@ -30,7 +30,7 @@ librosa==0.10.1
 soundfile==0.12.1
 scipy==1.11.4
 noisereduce==3.0.0
-basic-pitch==0.3.3
+basic-pitch==0.4.0
 
 # Music Analysis
 music21==9.1.0

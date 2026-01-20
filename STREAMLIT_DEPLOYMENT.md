@@ -177,7 +177,7 @@ Streamlit's `audio_input` component allows browser-based recording:
 ### Audio Issues
 
 **Problem**: "basic-pitch not found"
-**Solution**: Verify `basic-pitch==0.3.3` in requirements
+**Solution**: Verify `basic-pitch==0.4.0` in requirements
 
 **Problem**: Microphone not working
 **Solution**: Browser must have microphone permissions enabled

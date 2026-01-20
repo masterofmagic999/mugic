@@ -18,7 +18,7 @@ SQLAlchemy==2.0.23
 librosa==0.10.1
 soundfile==0.12.1
 scipy==1.11.4
-basic-pitch==0.3.3
+basic-pitch==0.4.0
 
 # PDF Processing - Lighter version
 PyMuPDF==1.23.8
