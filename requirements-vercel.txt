@@ -4,7 +4,7 @@
 # Core Flask - Essential
 Flask==3.0.0
 Flask-CORS==4.0.0
-Werkzeug==3.0.1
+Werkzeug==3.0.3
 
 # Authentication & Security - Essential
 Flask-Bcrypt==1.0.1
