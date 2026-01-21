@@ -1,0 +1,61 @@
+# Dockerfile optimized for Leapcell deployment with Audiveris OMR support
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies including Java for Audiveris
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    make \
+    libsndfile1 \
+    ffmpeg \
+    wget \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install OpenJDK (required for Audiveris OMR system)
+# Try multiple versions: 21 (latest in Debian Trixie), 17, or 11
+RUN apt-get update && \
+    (apt-get install -y --no-install-recommends openjdk-21-jre-headless || \
+     apt-get install -y --no-install-recommends openjdk-17-jre-headless || \
+     apt-get install -y --no-install-recommends openjdk-11-jre-headless || \
+     (echo "ERROR: Failed to install any Java version (21, 17, or 11)" && exit 1)) && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean && \
+    java -version
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements first for better caching
+COPY requirements-flask.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements-flask.txt
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p uploads recordings
+
+# Expose port 8080 (Leapcell's required port)
+EXPOSE 8080
+
+# Set environment variables
+ENV FLASK_APP=app.py \
+    FLASK_ENV=production \
+    PYTHONUNBUFFERED=1
+
+# Health check (using the dedicated /health endpoint on port 8080)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')" || exit 1
+
+# Run with gunicorn on port 8080
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "4", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-", "app:app"]
