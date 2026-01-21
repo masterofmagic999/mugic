@@ -35,8 +35,8 @@ WORKDIR /app
 # Copy requirements first for better caching
 COPY requirements-flask.txt .
 
-# Install Python dependencies including gunicorn
-RUN pip install --no-cache-dir -r requirements-flask.txt gunicorn
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements-flask.txt
 
 # Copy application code
 COPY . .
