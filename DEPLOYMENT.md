@@ -1,8 +1,38 @@
 # Mugic Deployment Guide
 
-This application can be easily deployed to multiple platforms. Choose the one that fits your needs:
+This Flask application can be easily deployed to multiple platforms. Choose the one that fits your needs:
 
-> **💡 Looking for free hosting without a credit card?** Check out options 1-4 below (PythonAnywhere, Replit, Glitch, or Koyeb). They offer truly free tiers with no credit card required!
+> **💡 Looking for recommended hosting?** We recommend **Leapcell** for modern, fast deployment with excellent Flask support!
+
+## 🚀 Recommended: Leapcell (Modern & Fast)
+
+**Leapcell** is our recommended deployment platform - modern, fast, and optimized for Flask applications.
+
+**Steps:**
+1. Sign up at [Leapcell](https://leapcell.io)
+2. Connect your GitHub repository
+3. Leapcell will auto-detect the configuration from `leapcell.json`
+4. Add environment variables in the Leapcell dashboard:
+   - `SECRET_KEY` - Generate with: `python -c "import secrets; print(secrets.token_hex(32))"`
+   - `JWT_SECRET_KEY` - Generate with the same command
+5. Deploy! Leapcell handles everything automatically
+
+**Pros:**
+- Modern platform with excellent Flask support
+- Fast deployment and scaling
+- Automatic SSL certificates
+- Easy environment management
+- Good free tier
+
+**Configuration:**
+The repository includes a `leapcell.json` configuration file that sets up:
+- Python 3.11 runtime
+- Automatic dependency installation
+- Gunicorn server with optimized workers
+- Health check endpoint
+- Environment variables
+
+---
 
 ## 💰 Free Options (No Credit Card Required)
 
@@ -21,7 +51,7 @@ The following platforms offer **truly free hosting without requiring a credit ca
 4. Create a virtual environment and install dependencies:
    ```bash
    mkvirtualenv --python=/usr/bin/python3.10 mugic
-   pip install -r requirements-flask.txt
+   pip install -r requirements.txt
    ```
 5. Go to "Web" tab → "Add a new web app"
 6. Choose "Manual configuration" → Python 3.10
@@ -99,20 +129,7 @@ The following platforms offer **truly free hosting without requiring a credit ca
 1. Sign up at [Glitch](https://glitch.com) (free account, no credit card)
 2. Click "New Project" → "Import from GitHub"
 3. Enter your repository URL
-4. Create a `glitch.json` file in the root:
-   ```json
-   {
-     "install": "pip install -r requirements-flask.txt",
-     "start": "gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120",
-     "watch": {
-       "ignore": [
-         "\\.pyc$",
-         "^venv/",
-         "^__pycache__/"
-       ]
-     }
-   }
-   ```
+4. The configuration is already set up in `glitch.json`
 5. Add environment variables in `.env` file (Glitch creates this automatically):
    ```env
    SECRET_KEY=your-secret-key-here
