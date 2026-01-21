@@ -5,6 +5,7 @@
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/mugic)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/masterofmagic999/mugic)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmasterofmagic999%2Fmugic)
+[![Deploy to Leapcell](https://leapcell.io/deploy-button.svg)](https://leapcell.io/deploy)
 
 Mugic is a powerful Flask-based application equipped with state-of-the-art AI that helps musicians practice more effectively. Upload PDF sheet music (analyzed with Audiveris OMR), record yourself playing (analyzed with Spotify's basic-pitch), and receive instant, actionable feedback powered by open-source LLMs.
 
@@ -12,10 +13,11 @@ Mugic is a powerful Flask-based application equipped with state-of-the-art AI th
 
 > **💡 New to deployment?** Check out [DEPLOYMENT.md](DEPLOYMENT.md) for a step-by-step guide!
 > 
-> **⚡ Now Optimized for Leapcell!** Modern Flask deployment with production-ready configuration.
+> **⚡ Now Optimized for Leapcell with Docker + Java Support!** Full Audiveris OMR in production.
 
 **Recommended Deployment:**
-- **🚀 Leapcell**: Modern, fast deployment platform - See configuration in `leapcell.json`
+- **🚀 Leapcell (NEW!)**: Docker deployment with full Java/Audiveris support - See [LEAPCELL_DEPLOYMENT.md](LEAPCELL_DEPLOYMENT.md)
+- **🎨 Render**: Full Docker deployment with Audiveris OMR - See [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md)
 
 **Other Free Options (No Credit Card Required):**
 - **PythonAnywhere**: Perfect for Python apps, completely free forever
@@ -25,7 +27,6 @@ Mugic is a powerful Flask-based application equipped with state-of-the-art AI th
 
 **One-Click Deployment (May Require Credit Card):**
 - **Vercel**: Click the deploy button above - serverless deployment with global CDN! See [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md)
-- **Render**: Click the deploy button above - includes full Audiveris OMR support! See [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md)
 - **Railway**: Click the button above (recommended - easiest)
 - **Fly.io**: `fly launch` (see [DEPLOYMENT.md](DEPLOYMENT.md))
 - **Docker**: `docker-compose up` (see below)
