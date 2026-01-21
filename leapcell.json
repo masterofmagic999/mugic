@@ -7,8 +7,8 @@
   "startCommand": "gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120",
   "env": {
     "FLASK_ENV": "production",
-    "SECRET_KEY": "",
-    "JWT_SECRET_KEY": "",
+    "SECRET_KEY": "REQUIRED_GENERATE_WITH_SECRETS",
+    "JWT_SECRET_KEY": "REQUIRED_GENERATE_WITH_SECRETS",
     "PORT": "8080"
   },
   "health": {
