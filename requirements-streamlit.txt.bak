@@ -1,13 +1,11 @@
 # ================================================================
-# FLASK/DOCKER DEPLOYMENT REQUIREMENTS
-# This file is used for Flask/Docker/Render/Railway deployments
-# For Streamlit Cloud deployment, use requirements.txt instead
+# STREAMLIT CLOUD DEPLOYMENT REQUIREMENTS
+# This file is used by Streamlit Cloud (share.streamlit.io)
+# For Flask/Docker deployments, use requirements-flask.txt instead
 # ================================================================
 
-# Core dependencies
-Flask==3.0.0
-Flask-CORS==4.0.0
-gunicorn==22.0.0
+# Streamlit
+streamlit==1.32.0
 
 # PDF and Sheet Music Processing
 pdf2image==1.16.3
@@ -30,7 +28,7 @@ librosa==0.10.1
 soundfile==0.12.1
 scipy==1.11.4
 noisereduce==3.0.0
-basic-pitch==0.4.0
+basic-pitch==0.4.0  # Uses tflite-runtime on Linux with Python < 3.11 (no full TensorFlow needed)
 
 # Music Analysis
 music21==9.1.0
@@ -43,9 +41,9 @@ torch==2.6.0
 accelerate==0.25.0
 sentencepiece==0.1.99
 
-# Authentication & Security
-Flask-Bcrypt==1.0.1
-Flask-JWT-Extended==4.6.0
+# Authentication & Security (Streamlit-compatible)
+bcrypt==4.1.2
+PyJWT==2.8.0
 email-validator==2.1.0
 
 # Database
@@ -53,11 +51,8 @@ SQLAlchemy==2.0.23
 
 # Utilities
 python-dotenv==1.0.0
-Werkzeug==3.0.1
 requests==2.31.0
 
 # Note: Audiveris requires Java Runtime Environment (JRE) 11 or higher
-# The Dockerfile installs OpenJDK 17 which is compatible
-# OEMER is added as a serverless-friendly alternative for Vercel
-# pytesseract requires tesseract-ocr system package (see DEPLOYMENT.md)
-# See DEPLOYMENT.md for Audiveris installation instructions
+# OEMER is recommended for Streamlit Cloud deployment (serverless-friendly)
+# pytesseract requires tesseract-ocr system package (add to packages.txt)
