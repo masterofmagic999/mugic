@@ -9,7 +9,7 @@
 - Python 3.13.11 compatibility issues with TensorFlow
 
 **Solution Applied:**
-1. **Updated Python version** to 3.10.15 in `runtime.txt`
+1. **Updated Python version** to 3.10.13 in `runtime.txt` and `.python-version`
 2. **Upgraded basic-pitch** from 0.3.3 to 0.4.0 in `requirements.txt`
 3. Python 3.10 < 3.11 triggers basic-pitch to use `tflite-runtime` instead of full TensorFlow
 
@@ -23,7 +23,8 @@
 
 Before deploying to Streamlit Cloud, verify:
 
-- [ ] `runtime.txt` contains `python-3.10.15` (or another 3.10.x version)
+- [ ] `runtime.txt` contains `python-3.10.13` (or another 3.10.x version)
+- [ ] `.python-version` file contains `3.10.13` (for redundancy)
 - [ ] `requirements.txt` contains `basic-pitch==0.4.0` (not 0.3.3)
 - [ ] `packages.txt` lists all system dependencies (tesseract-ocr, ffmpeg, etc.)
 - [ ] Repository is pushed to GitHub
@@ -42,9 +43,9 @@ Before deploying to Streamlit Cloud, verify:
 **Solutions:**
 
 #### A. Python Version Issues
-- **Check:** Ensure `runtime.txt` exists and contains `python-3.10.15`
-- **Fix:** Create or update `runtime.txt` with the correct Python version
-- **Why:** Streamlit Cloud may default to Python 3.13 which has compatibility issues
+- **Check:** Ensure `runtime.txt` exists and contains `python-3.10.13` and `.python-version` contains `3.10.13`
+- **Fix:** Create or update both `runtime.txt` and `.python-version` with the correct Python version
+- **Why:** Streamlit Cloud may default to Python 3.13 which has compatibility issues with TensorFlow
 
 #### B. Dependency Conflicts
 - **Check:** Look for conflicting version requirements in `requirements.txt`
@@ -98,7 +99,7 @@ ImportError: cannot import name 'X' from 'Y'
 These versions work together on Streamlit Cloud (as of January 2026):
 
 ```
-python==3.10.15  # In runtime.txt
+python==3.10.13  # In runtime.txt and .python-version
 streamlit==1.32.0
 basic-pitch==0.4.0  # Uses tflite-runtime automatically
 numpy==1.26.4
@@ -142,8 +143,10 @@ pip install -r requirements.txt
 
 ### Python Version Handling
 - Streamlit Cloud reads Python version from `runtime.txt`
-- Format must be exactly: `python-X.Y.Z` (e.g., `python-3.10.15`)
+- Format must be exactly: `python-X.Y.Z` (e.g., `python-3.10.13`)
+- Also create `.python-version` file with just `X.Y.Z` (e.g., `3.10.13`) for redundancy
 - If `runtime.txt` is missing, Streamlit may use a default Python version (currently 3.13.x)
+- Use Python 3.10.x to ensure basic-pitch uses tflite-runtime instead of TensorFlow
 
 ### Package Installation Order
 1. System packages from `packages.txt` are installed first
@@ -205,14 +208,17 @@ If you encounter the TensorFlow issue again:
 cd /path/to/mugic
 
 # Update runtime.txt
-echo "python-3.10.15" > runtime.txt
+echo "python-3.10.13" > runtime.txt
 
-# Update basic-pitch in requirements.txt
+# Create .python-version for redundancy
+echo "3.10.13" > .python-version
+
+# Update basic-pitch in requirements.txt (if needed)
 sed -i 's/basic-pitch==0.3.3/basic-pitch==0.4.0/' requirements.txt
 
 # Commit and push
-git add runtime.txt requirements.txt
-git commit -m "Fix: Update to Python 3.10.15 and basic-pitch 0.4.0 for Streamlit Cloud compatibility"
+git add runtime.txt .python-version requirements.txt
+git commit -m "Fix: Update to Python 3.10.13 and basic-pitch 0.4.0 for Streamlit Cloud compatibility"
 git push origin main
 
 # Wait for Streamlit Cloud to rebuild (2-5 minutes)
