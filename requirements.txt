@@ -20,8 +20,10 @@ opencv-python==4.8.1.78
 numpy==1.26.4
 scikit-image==0.22.0
 
-# OEMER - End-to-end OMR (lightweight, serverless-friendly)
-oemer==0.1.8
+# OEMER - End-to-end OMR (installed without GPU dependencies)
+# Install OEMER separately to avoid onnxruntime-gpu dependency
+onnxruntime==1.16.3  # CPU-only version for cloud deployment
+# oemer==0.1.8 will be installed via: pip install oemer --no-deps
 
 # OCR for text detection in music scores (optional but recommended)
 pytesseract==0.3.10
