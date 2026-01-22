@@ -31,10 +31,9 @@ scikit-image==0.22.0
 
 # OEMER - End-to-end OMR (PERFECT for Vercel!)
 # Lightweight, serverless-friendly, no Java required
-# Install with CPU version to avoid onnxruntime-gpu dependency
+# CPU version to avoid onnxruntime-gpu dependency issue
 onnxruntime==1.17.3  # CPU-only version
-# Note: Vercel doesn't support --no-deps pip flag in serverless
-# If this causes issues, OEMER can be installed separately in build hook
+# Note: oemer==0.1.8 is installed separately in vercel-build.sh with --no-deps flag
 
 # Music Analysis - Core
 music21==9.1.0
