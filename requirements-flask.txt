@@ -20,8 +20,9 @@ opencv-python==4.8.1.78
 numpy==1.26.4
 scikit-image==0.22.0
 
-# OEMER - End-to-end OMR (lightweight, serverless-friendly)
-oemer==0.1.8
+# OEMER - End-to-end OMR (CPU version for Docker deployments)
+onnxruntime==1.17.3  # CPU-only version
+# oemer will be installed without dependencies in Dockerfile
 
 # OCR for text detection in music scores (optional but recommended)
 pytesseract==0.3.10

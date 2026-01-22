@@ -361,6 +361,14 @@ Configure alerts in Leapcell for:
 
 ## 🐛 Troubleshooting Common Issues
 
+### Issue: `ERROR: No matching distribution found for onnxruntime-gpu`
+
+**Cause:** OEMER package tries to install GPU dependencies which aren't available in cloud environments.
+
+**Solution:** Already fixed in Dockerfile.leapcell - OEMER is installed with `--no-deps` flag to use the CPU version of onnxruntime instead.
+
+**What this means:** Your app will still have OEMER support, but using CPU inference instead of GPU (which is fine for cloud deployments).
+
 ### Issue: Build Fails During Dependency Installation
 
 **Symptoms:**

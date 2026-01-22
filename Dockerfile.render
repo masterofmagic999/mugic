@@ -38,6 +38,9 @@ COPY requirements-flask.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements-flask.txt gunicorn
 
+# Install OEMER without dependencies to avoid onnxruntime-gpu requirement
+RUN pip install --no-cache-dir --no-deps oemer==0.1.8
+
 # Copy application code
 COPY . .
 
